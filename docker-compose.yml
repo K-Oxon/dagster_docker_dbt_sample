@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  postgres_dwh:
+    image: postgres:15
+    container_name: postgres_dwh
+    ports:
+      - 5432:5432
+    volumes:
+      - dwh:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=dwh
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+volumes:
+  dwh:
