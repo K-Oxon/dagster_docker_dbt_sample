@@ -7,20 +7,8 @@ run_coordinator:
   class: QueuedRunCoordinator
 
 run_launcher:
-  module: dagster_docker
-  class: DockerRunLauncher
-  config:
-    env_vars:
-      - DAGSTER_POSTGRES_USER
-      - DAGSTER_POSTGRES_PASSWORD
-      - DAGSTER_POSTGRES_DB
-    network: docker_example_network
-    container_kwargs:
-      volumes: # Make docker client accessible to any launched containers as well
-        - /var/run/docker.sock:/var/run/docker.sock
-        - /tmp/io_manager_storage:/tmp/io_manager_storage
-        - /Users/kokumura/git_src/github.com/K-Oxon/dagster_docker_dbt_sample/repo.py:/opt/dagster/app/repo.py
-        - /Users/kokumura/git_src/github.com/K-Oxon/dagster_docker_dbt_sample/jaffle_shop:/opt/dagster/app/jaffle_shop
+  module: dagster.core.run_launcher
+  class: DefaultRunLauncher
 
 run_storage:
   module: dagster_postgres.run_storage
