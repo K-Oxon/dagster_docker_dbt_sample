@@ -1,0 +1,3 @@
+[submodule "src/dbt_projects/jaffle_shop"]
+	path = src/dbt_projects/jaffle_shop
+	url = https://github.com/dbt-labs/jaffle_shop.git
