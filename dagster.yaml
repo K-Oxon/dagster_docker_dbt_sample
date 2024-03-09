@@ -7,7 +7,7 @@ run_coordinator:
   class: QueuedRunCoordinator
 
 run_launcher:
-  module: dagster.core.run_launcher
+  module: dagster.core.launcher
   class: DefaultRunLauncher
 
 run_storage:
