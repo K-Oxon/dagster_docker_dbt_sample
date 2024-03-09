@@ -1,24 +1,7 @@
 version: "3.7"
 services:
-  # dbtが操作するデータウェアハウス
-  postgres_dwh:
-    image: postgres:15
-    container_name: postgres_dwh
-    hostname: postgres_dwh
-    ports:
-      - 5432:5432
-    volumes:
-      - dwh:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=dwh
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    networks:
-      - docker_example_network
-
-  # 以下dagsterのコンテナ
   docker_example_postgresql:
-    image: postgres:15
+    image: postgres:16
     container_name: docker_example_postgresql
     environment:
       POSTGRES_USER: "postgres_user"
@@ -45,8 +28,7 @@ services:
     networks:
       - docker_example_network
     volumes:
-      - ./repo.py:/opt/dagster/app/repo.py
-      - ./jaffle_shop:/opt/dagster/app/jaffle_shop
+      - ./src:/opt/dagster/app/src
 
   docker_example_webserver:
     build:

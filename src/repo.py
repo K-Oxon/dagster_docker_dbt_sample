@@ -1,13 +1,14 @@
 import os
 from pathlib import Path
 
-from dagster import Definitions, OpExecutionContext, ScheduleDefinition
+from dagster import Definitions, OpExecutionContext
 from dagster_dbt import DbtCliResource, build_schedule_from_dbt_selection, dbt_assets
 
-dbt_project_dir = Path(__file__).joinpath("..", "jaffle_shop").resolve()
+dbt_project_dir = Path(__file__).joinpath("..", "dbt_projects", "jaffle_shop").resolve()
+dbt_profiles_dir = Path(__file__).joinpath("..", "dbt_projects").resolve()
 
 dbt = DbtCliResource(
-    project_dir=os.fspath(dbt_project_dir), profiles_dir=os.fspath(dbt_project_dir)
+    project_dir=os.fspath(dbt_project_dir), profiles_dir=os.fspath(dbt_profiles_dir)
 )
 
 # If DAGSTER_DBT_PARSE_PROJECT_ON_LOAD is set, a manifest will be created at runtime.
@@ -35,6 +36,6 @@ defs = Definitions(
     assets=[jaffle_shop_dbt_assets],
     schedules=[daily_dbt_assets_schedule],
     resources={
-        "dbt": DbtCliResource(project_dir=os.fspath(dbt_project_dir)),
+        "dbt": dbt,
     },
 )

@@ -1,0 +1,5 @@
+jaffle_shop:
+  outputs:
+    dev:
+      type: duckdb
+  target: dev
