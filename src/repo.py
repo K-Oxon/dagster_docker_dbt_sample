@@ -2,7 +2,13 @@ import os
 from pathlib import Path
 
 from dagster import Definitions, OpExecutionContext
-from dagster_dbt import DbtCliResource, build_schedule_from_dbt_selection, dbt_assets
+from dagster_dbt import (
+    DagsterDbtTranslator,
+    DagsterDbtTranslatorSettings,
+    DbtCliResource,
+    build_schedule_from_dbt_selection,
+    dbt_assets,
+)
 
 dbt_project_dir = Path(__file__).joinpath("..", "dbt_projects", "jaffle_shop").resolve()
 dbt_profiles_dir = Path(__file__).joinpath("..", "dbt_projects").resolve()
@@ -19,8 +25,17 @@ if os.getenv("DAGSTER_DBT_PARSE_PROJECT_ON_LOAD"):
 else:
     dbt_manifest_path = dbt_project_dir.joinpath("target", "manifest.json")
 
+# experimental
+# see https://docs.dagster.io/integrations/dbt/reference#loading-dbt-tests-as-asset-checks
+dagster_dbt_translator = DagsterDbtTranslator(
+    settings=DagsterDbtTranslatorSettings(enable_asset_checks=True)
+)
 
-@dbt_assets(manifest=dbt_manifest_path)
+
+@dbt_assets(
+    manifest=dbt_manifest_path,
+    dagster_dbt_translator=dagster_dbt_translator,
+)
 def jaffle_shop_dbt_assets(context: OpExecutionContext, dbt: DbtCliResource):
     yield from dbt.cli(["build"], context=context).stream()
 
